@@ -1,0 +1,49 @@
+<div class="dashboard">
+
+<div class="row">
+
+  <google-map height="400px"
+              width="100%"
+              [center]="center"
+              [zoom]="zoom"
+  >
+    <map-marker #marker="mapMarker"
+                *ngFor="let marker of astraMarkers"
+                [position]="marker.latLng"
+                (mapClick)="openInfoWindow(marker)"></map-marker>
+    <map-info-window>{{transcription}}</map-info-window>
+  </google-map>
+
+</div>
+
+<div class="row">
+
+  <mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+    <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: tableColumns"></mat-row>
+
+    <ng-container matColumnDef="lastUpdatedText">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Time of Call</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.lastUpdatedText}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="transcription">
+      <mat-header-cell *matHeaderCellDef>Message</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.transcription}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="username">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Who</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.username}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="sentimentScore">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Sentiment</mat-header-cell>
+      <mat-cell *matCellDef="let element" [ngClass]="{'negative-sentiment': element.negativeSentiment }"> {{element.sentimentScore}} </mat-cell>
+    </ng-container>
+
+  </mat-table>
+
+</div>
+
+</div>

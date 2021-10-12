@@ -1,8 +1,6 @@
 /node_modules/
 dist
 
-
-*.csv
 .idea/*
 .idea
 netlify-leave-message.iml

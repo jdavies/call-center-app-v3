@@ -1,0 +1,12 @@
+[build]
+  publish = "dist/uploadWAV"
+  command = "ng build --prod"
+  functions = "./functions"
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+# Production context: all deploys from the Production branch set in your site’s
+# Branches settings in the UI will inherit these settings.
+[context.production]
+environment = { ASTRA_DB_ID = "<YOUR_DATABASE_ID>", ASTRA_DB_REGION = "<YOUR REGION NAME>", ASTRA_DB_KEYSPACE = "callcenter", ASTRA_DB_APPLICATION_TOKEN = "<YOUR_ASTRA_APPLICATION_TOKEN>" }

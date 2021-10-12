@@ -1,0 +1,45 @@
+<div id="login-content">
+
+<div id="login">
+
+  <table>
+
+    <tr>
+      <td>
+         <table>
+           <tr>
+             <td>
+  <label>
+    User ID:
+    <input type="text" [formControl]="user">
+  </label>
+             </td>
+           </tr>
+           <tr>
+             <td>
+  <label>
+    Password:
+    <input type="password" [formControl]="password">
+  </label>
+             </td>
+           </tr>
+         </table>
+      </td>
+      <td>
+   <button mat-raised-button color="primary" (click)="tryLogin()" id="btnSubmit">Login</button>
+<div *ngIf="loginSuccessful; then thenBlock else elseBlock"></div>
+<ng-template #thenBlock>Welcome; redirecting...</ng-template>
+<ng-template #elseBlock>{{loginMessage}}</ng-template>
+      </td>
+    </tr>
+
+
+  </table>
+
+
+</div>
+
+</div>
+
+
+

@@ -1,0 +1,20 @@
+.showImages {
+  width: 100px;
+  height: 100px;
+}
+img {
+  width: 100%;
+  height: 100%;
+}
+.transcription-table {
+  text-align: left;
+  width: 40%;
+}
+
+.navbar {
+  justify-content: flex-end;
+}
+
+.nav-list {
+  padding: 1rem;
+}

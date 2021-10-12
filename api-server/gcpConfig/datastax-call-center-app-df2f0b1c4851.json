@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "gcp-lcm-project",
+  "private_key_id": "GET YOUR OWN PRIVATE KEY TO GCP a40623cd14c1990",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMII  KEEP IT PRIVATE   SCBKYwggSiAgEAAoIBAQDpVx4ZbiaOCnZF\nMeWba1WPvFMTy5wG+bgrpUfTPuH0HHOgC0j1+vYSFsuUvQ9ghxYelwP5aeToXrSI\n9BQ+hQ3RaobWF7OfrCCrA50T9CyRwBWX5Zd3VJuvw+Qd/VIpuQhgMG2kGOmmYbO4\nyAvdIdOE9PsDuIFFwPfED7+vjt+cORaFy83sXTSS5FrjB78uXOiO0vfJ/X+3yMOg\ngUIX2kgApbl7lBpgNjTJ8pKB+RS74iwL5QD6HGyWX8QyqfkrC+bBjsm41SmO440M\nYVwVi8E/SsaSe469SOm8dzvDKdQe4zkclGfr5dvcnk5AiyJJ1hh+KLHGWjOIv9b0\nm8GcVzHvAgMBAAECgf8XCLJCY+tZDS0qgGusMWFsP8LMpprncH4uhwhGT/vSvbKA\n5e66WXyNNuKTvzRl7yya7iIFfPUXeQDBdzP9i3uqqgTIKpvRx9VPA740ClMA4I0v\nyDTZFPHhTeGSB0ikQjeaIClgJ+5d1RMldEMss88CJZTv9HrFthcWBuAZUcAtno6R\nbNT78I3Ej++lCtfLINDsl58tsqBrlR8Zk0ElVGgU24AwnJ1Aa93reSYRWN7Cu2XK\nuzdG+msQN2s1ejbFQqo2ANKrAndpSyH4REOKqgJpFbTlb9yv9aPg7w9htogMDqfL\net/p/tXcraxnwCCQTGRzyrvsJc4DRGPkGARrA6ECgYEA9u+YZEBUUBq1jRaWAAl6\nuv6lqwOKXMmAZu61uXIPNLmnJdugGhcYXHPgcVMfWlYC+kvg1Ae5Hcu0uoWkGAqL\nX/Ew1zoVnVlAgv40Rifsy49nTeAvNC1yT4Gy70GfMZpHqYrnH1FoyiaDaDRaEITI\n44u76OhOKNNbKHo2S64Da7ECgYEA8efEZKrqCDoOFxO+tMnVToN0hH60o13TyVVn\nc0OslWD+WEDlKKT0+4MLQSHt7jA2L7RoietxNaWBPSsR6DryEkOs7ZWQK76B4qUs\nQ6cYxr66923hxlSFgZllHNcc8S52Oax2mRY5YiK8MRcBnBDAN3jikbooj1mqbd0G\nwUWS/58CgYBltN+OgxR2/dlDKEdV8pGTTWkM2+N0PiZdvvooTHtI2yKmLCRwOoz1\nH2EVLAhg28ZUM0aB7kBnrkxc+shQgp9PP/c+3pSif21bxrnfH3ifiwwgfjLTCdjo\nOGJruxqHgqT7htOVCaHgiSZcmBt0bEyVtCsMTgpLNGp6bIPKffy4sQKBgQCmcacS\n8PqogHGTdVWBhWJMbGyugZP+2B9R536Ps5+7BIrc5IIIjj+2EruarCLPAcM23bYU\nN7ikheU/1jOzC2PmJ0SEEKWrQ6CQ9r9XKVEF5tQ0TRnM4fkebBJDXsueMy7Ljhvo\nR39iQ64jRMYpwOjRAk86n9EqmTKH902fjCSR1wKBgQDaJn8+6PgsOg+V/gNfjzz1\nEzTM+RY5ASI8siEXuab7CnzkejRBvRWolhklZ0rtM94CaA/ZbacH0Y8VGvHtYwFO\n29nqsWF6q01v7m0WsPZ63B0jNOCXDWzQLRKb2Y+h8HQIOCWypOsZqTtiFJdWOBWe\n9rZUR1h1WboeG6QS4/5wLA==\n-----END PRIVATE KEY-----\n",
+  "client_email": "osaeed-PRIVATE@gcp-lcm-project.iam.gserviceaccount.com",
+  "client_id": "105577180659512375332",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/osaeed-fallout%40gcp-lcm-project.iam.gserviceaccount.com"
+}

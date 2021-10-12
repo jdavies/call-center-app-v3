@@ -1,0 +1,20 @@
+mat-button-toggle-group {
+  margin-left: 12px;
+}
+
+#login-content {
+  background-image: url("/assets/images/CoxHomePage.png");
+  height: 70%;
+}
+
+#login {
+  margin-left: 60%;
+  background-color: white;
+  font-size: 1em;
+}
+
+#btnSubmit {
+  margin-left: 10px;
+  color: white;
+  background-color: darkblue;
+}
