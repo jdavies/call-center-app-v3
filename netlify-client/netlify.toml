@@ -9,4 +9,4 @@
 # Production context: all deploys from the Production branch set in your site’s
 # Branches settings in the UI will inherit these settings.
 [context.production]
-environment = { ASTRA_DB_ID = "<YOUR_DATABASE_ID>", ASTRA_DB_REGION = "<YOUR REGION NAME>", ASTRA_DB_KEYSPACE = "callcenter", ASTRA_DB_APPLICATION_TOKEN = "<YOUR_ASTRA_APPLICATION_TOKEN>" }
+environment = { ASTRA_DB_ID = "ba99a63b-49f7-4ac1-8388-f3056a7a47a0-1", ASTRA_DB_REGION = "us-west1", ASTRA_DB_KEYSPACE = "callcenter", ASTRA_DB_APPLICATION_TOKEN = "AstraCS:WoYWnQGbzyQHooswjuyZRnoY:7be142be2764c8758ec9f37322a48cbd83ec99ff7a3740baf60e83b7160a6685" }
