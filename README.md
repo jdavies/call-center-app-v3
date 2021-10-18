@@ -74,6 +74,14 @@ You will need the following components
 
 Details on installation are in progress.
 
+### Install nvm locally
+
+```nvm``` is the Node Version Manager tool. The instructions for installing and using nvm are available at [https://github.com/nvm-sh/nvm#installing-and-updating](https://github.com/nvm-sh/nvm#installing-and-updating). You can use the commnd ```nvm ls-remote```to see all of the version of node that you can install. At the time of thi writing, the most recent version was 16.11.1 which I installed with the following command:
+
+```sh
+nvm install 16.11.1
+```
+
 ### Create the Astra Database
 
 1. Create your Astra database. In this example we named the database ```call_center``` and created a keyspace in it named ```callcenter```
@@ -87,10 +95,13 @@ Details on installation are in progress.
 
 ### Configure Your Netlify Account
 
-1. Clone a copy of the GitHub project at [TBD]()
-1. In the ```call-center-app-v3/netlify-client/``` copy the template_netlify.toml file and chnge the copies name to ```netify.toml```
-1. Edit the ```netlify.toml``` file so the the last line contains the correct values for your Astra Database ID, the region it is in and also the Astra Database Token.
+1. Clone a copy of the GitHub project at [GitHub](https://github.com/jdavies/call-center-app-v3)
+1. ???? In the ```call-center-app-v3/netlify-client/``` copy the template_netlify.toml file and chnge the copies name to ```netify.toml``` ????
+1. ???? Edit the ```netlify.toml``` file so the the last line contains the correct values for your Astra Database ID, the region it is in and also the Astra Database Token. ????
 1. Create a GitHub project on your github account for the call-center-app-v3 project and check in all of the project's code. Netlify will need to use your github account.
+1. Connect Netlify to your github ```call-center-app-v3``` project.
+1. In the Environment settings for your application in Netlify, define environment variables. ![Netlify Environment Variables](./images/netlify_environment_vars.png)
+1. Next configure your build options in Netlify. [Build Settings](./images/netlify_build_settings.png)
 
 ### Configure Your Google Account
 

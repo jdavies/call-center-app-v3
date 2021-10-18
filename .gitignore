@@ -128,4 +128,4 @@ dmypy.json
 # Pyre type checker
 .pyre/
 database/CallCenter_GeneratedToken.csv
-netlify-client/netlify.toml
+# netlify-client/netlify.toml
