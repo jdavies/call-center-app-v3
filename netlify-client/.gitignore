@@ -4,3 +4,4 @@ dist
 .idea/*
 .idea
 netlify-leave-message.iml
+**/setenv.sh
