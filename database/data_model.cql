@@ -1,12 +1,18 @@
 # create keyspace with command below in DSE, or via astra UI.
 # CREATE KEYSPACE callcenter WITH replication = {'class': 'NetworkTopologyStrategy', 'caas-dc': '3'}  AND durable_writes = true;
 
+DROP TABLE IF EXISTS callcenter.users;
 CREATE TABLE callcenter.users (
     username text,
     password text,
     userid uuid,
     PRIMARY KEY (username, password)
 );
+CREATE CUSTOM INDEX userid_idx ON callcenter.users (userid) USING 'StorageAttachedIndex';
+
+-- The password is a SHA256 hash of 'demo'
+insert into callcenter.users(username, password, userid) 
+   values('demo@datastax.com', '2a97516c354b68848cdbd8f54a226a0a55b21ed138e207ad6c5cbb9c00aa5aea', uuid());
 
 CREATE TABLE callcenter.call_center_voice_source (
     call_id timeuuid PRIMARY KEY,
