@@ -31,14 +31,14 @@ status, and present the dashboard, and b) has a **netlify function that
 invokes Stargate's Document API** to get a specific user's recordings (at
 the moment it is hard coded to all recordings).
 
-Try it out - [https://festive-morse-d7a982.netlify.app/](https://festive-morse-d7a982.netlify.app/)
+Try it out - [https://call-center-605a88.netlify.app/login](https://call-center-605a88.netlify.app/login)
 
 Login using either:
 
 - demo2 / demo2Pwd
 - demo1/demo1PwdIsGood
 
-Calling the netlify function directly - [https://festive-morse-d7a982.netlify.app/.netlify/functions/getAllRecordings](https://festive-morse-d7a982.netlify.app/.netlify/functions/getAllRecordings)
+Calling the netlify function directly - [https://call-center-605a88.netlify.app/.netlify/functions/getAllRecordings](https://call-center-605a88.netlify.app/.netlify/functions/getAllRecordings)
 
 ### App Server
 
