@@ -130,3 +130,4 @@ dmypy.json
 database/CallCenter_GeneratedToken.csv
 # netlify-client/netlify.toml
 # netlify-client/package-lock.json
+**/setenv.sh
