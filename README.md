@@ -10,10 +10,9 @@ The application is up and running at
 
 The app works best on Chrome, and you need to give browser permissions for recording and location when prompted (for full effect).
 
-Click login and use one of the following credentials:
+Click login and use the following credentials:
 
-- demo1 / demo1PwdIsGood
-- demo2 / demo2Pwd
+- demo@datstax.com / demo
 
 Press Start Recording and then start speaking, and press Stop Recording when finished.  Watch as your call is processed (it will take 1-2 mins).  Once you see status gcp-complete, you can click on the dashboard and click on the map to find your call and transcription.
 

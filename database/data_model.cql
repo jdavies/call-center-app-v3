@@ -8,6 +8,8 @@ CREATE TABLE callcenter.users (
     userid uuid,
     PRIMARY KEY (username, password)
 );
+
+-- We use this index to quickly look up the user to ensure it is valid.
 CREATE CUSTOM INDEX userid_idx ON callcenter.users (userid) USING 'StorageAttachedIndex';
 
 -- The password is a SHA256 hash of 'demo'

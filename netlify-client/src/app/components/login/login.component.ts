@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
   loginSuccessful: boolean  = false;
   loginMessage: string = 'Please enter credentials to login';
 
-  user:FormControl;
+  username:FormControl;
   password: FormControl;
 
   constructor(private authService: AuthService,
@@ -24,21 +24,22 @@ export class LoginComponent implements OnInit {
               private userService: UserService) { }
 
   ngOnInit(): void {
-    this.user = new FormControl('');
+    this.username = new FormControl('');
     this.password = new FormControl('');
   }
 
   tryLogin() {
-    console.debug('login request|user=' + this.user.value + '|password=' + this.password.value);
+    console.debug('login request|user=' + this.username.value + '|password=' + this.password.value);
 
-    this.authService.login({username:this.user.value, password:this.password.value})
+    this.authService.login({username:this.username.value, password:this.password.value})
       .subscribe((result) => {
 
         console.log(result.body);
-        console.log("jwt|" + result.jwt);
-        this.tokenStorageService.storeToken(result.jwt);
+        // console.log("jwt|" + result.jwt);
+        console.log(result.token);
+        this.tokenStorageService.storeToken(result.token);
 
-        this.userService.setUserName(this.user.value);
+        this.userService.setUserName(this.username.value);
 
         this.loginSucceeded();
       }, (errData) => {
