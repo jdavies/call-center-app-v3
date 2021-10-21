@@ -7,7 +7,8 @@ import { environment} from "../../../environments/environment";
 const AUTH_API = "https://us-west2-call-center-329523.cloudfunctions.net/login";
 
 const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  headers: new HttpHeaders({ 'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*' })
 };
 
 @Injectable({
