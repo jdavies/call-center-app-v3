@@ -6,7 +6,6 @@
         "cors": "^2.8.5",
         "crypto-js": "^4.0.0",
         "escape-html": "^1.0.3",
-        "express": "^4.17.1",
         "jsonwebtoken": "^8.5.1"
     }
 }

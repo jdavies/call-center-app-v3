@@ -34,6 +34,7 @@ export class LoginComponent implements OnInit {
     this.authService.login({username:this.username.value, password:this.password.value})
       .subscribe((result) => {
 
+        console.log(result);
         console.log(result.body);
         console.log("jwt|" + result.jwt);
         console.log(result.token);

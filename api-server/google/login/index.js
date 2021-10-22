@@ -8,9 +8,6 @@ var jwt = require('jsonwebtoken');
 const { createClient } = require("@astrajs/rest");
 const JWT_SECRET = 'a34Ft!';
 const basePath = `/api/rest/v2/keyspaces/${process.env.KEYSPACE}`;
-// const express = require('express');
-// const app = express();
-// app.use(cors());
 /**
  * Responds to a login request.
  *
@@ -27,15 +24,13 @@ const basePath = `/api/rest/v2/keyspaces/${process.env.KEYSPACE}`;
  */
 exports.login = async (req, res) => {
   // Logging in must be done via POST
-  console.log(`Request Method: ${req.method}`);
   cors(req, res, async () => {
-    // res.status(200).send({ ...req.headers })
     console.log("login - TOP");
     console.log("basePath = " + basePath);
     console.log("LOCAL_DC = " + process.env.LOCAL_DC);
     console.log("LOCAL_DC2 = " + process.env['LOCAL_DC']);
     res.set('Access-Control-Allow-Origin', 'https://call-center-605a88.netlify.app'); // Allow for CORS
-    
+
     if(req.method === 'OPTIONS') {
       console.log("OPTIONS called on login!");
       // Send response to OPTIONS requests
@@ -62,10 +57,7 @@ exports.login = async (req, res) => {
           exp: Math.floor(Date.now() / 1000) + (60 * 60),
           userid: `${result.userid}`
         }, JWT_SECRET);
-        // cors(req, res, () => 
-        //   res.end(JSON.stringify(`{"token": "${token}"`))
-        // );
-        res.end(JSON.stringify(`{"token": "${token}"`));
+        res.end(JSON.stringify(`{"jwt": "${token}"`));
       } else {
         // Login failed
         console.log("Login failed");
@@ -73,8 +65,6 @@ exports.login = async (req, res) => {
       }
     }
   });
-  // res.set('Access-Control-Allow-Origin', 'https://call-center-605a88.netlify.app');
-  // res.header('Access-Control-Allow-Origin', 'https://call-center-605a88.netlify.app/');
 };
 
 // The password needs to be SHA256 hashed
