@@ -33,12 +33,13 @@ export class LoginComponent implements OnInit {
 
     this.authService.login({username:this.username.value, password:this.password.value})
       .subscribe((result) => {
-
-        console.log(result);
-        console.log(result.body);
+        console.log("result = " + result);
+        console.log("result.body = " + result.body);
         console.log("jwt|" + result.jwt);
-        console.log(result.token);
-        this.tokenStorageService.storeToken(result.token);
+        var json = JSON.parse(result);
+        var token = json.jwt;
+        console.log("token = " + token);
+        this.tokenStorageService.storeToken(token);
 
         this.userService.setUserName(this.username.value);
 
