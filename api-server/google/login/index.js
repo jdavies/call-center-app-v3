@@ -27,21 +27,27 @@ const basePath = `/api/rest/v2/keyspaces/${process.env.KEYSPACE}`;
  */
 exports.login = async (req, res) => {
   // Logging in must be done via POST
+  console.log(`Request Method: ${req.method}`);
   cors(req, res, async () => {
     // res.status(200).send({ ...req.headers })
     console.log("login - TOP");
     console.log("basePath = " + basePath);
     console.log("LOCAL_DC = " + process.env.LOCAL_DC);
     console.log("LOCAL_DC2 = " + process.env['LOCAL_DC']);
-    res.header('Access-Control-Allow-Origin', 'https://call-center-605a88.netlify.app'); // Allow for CORS
-    res.header('Access-Control-Allow-Methods', 'POST'); // Allow for CORS on POST
-    res.header('Access-Control-Allow-Credentials', 'true');
-    res.header('Access-Control-Allow-Headers', 'Authorization, Content-Type');
-    if (req.method == 'POST') {
+    res.set('Access-Control-Allow-Origin', 'https://call-center-605a88.netlify.app'); // Allow for CORS
+    
+    if(req.method === 'OPTIONS') {
+      console.log("OPTIONS called on login!");
+      // Send response to OPTIONS requests
+      res.set('Access-Control-Allow-Methods', 'POST');
+      res.set('Access-Control-Allow-Headers', 'Content-Type');
+      res.set('Access-Control-Max-Age', '3600');
+      res.status(204).send('');
+    } else if (req.method == 'POST') {
       // First we extract the provided username and password
       let username = req.body.username;
       let password = req.body.password;
-
+      console.log(`username = ${username}, password = ${password}`);
       // SHA256 encrypt the plain-text password
       password = SHA256(password);
 
@@ -67,8 +73,8 @@ exports.login = async (req, res) => {
       }
     }
   });
-  res.set('Access-Control-Allow-Origin', 'https://call-center-605a88.netlify.app');
-  res.header('Access-Control-Allow-Origin', 'https://call-center-605a88.netlify.app/');
+  // res.set('Access-Control-Allow-Origin', 'https://call-center-605a88.netlify.app');
+  // res.header('Access-Control-Allow-Origin', 'https://call-center-605a88.netlify.app/');
 };
 
 // The password needs to be SHA256 hashed
