@@ -20,8 +20,8 @@ export class AuthService {
 
   login(credentials): Observable<any> {
     return this.http.post(AUTH_API, {
-      userID: credentials.username,
-      pwd: credentials.password
+      username: credentials.username,
+      password: credentials.password
     }, httpOptions);
   }
 

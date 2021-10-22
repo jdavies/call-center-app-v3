@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit {
       .subscribe((result) => {
 
         console.log(result.body);
-        // console.log("jwt|" + result.jwt);
+        console.log("jwt|" + result.jwt);
         console.log(result.token);
         this.tokenStorageService.storeToken(result.token);
 
