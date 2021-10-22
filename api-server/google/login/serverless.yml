@@ -1,0 +1,33 @@
+service: gcp-node-cassandra-http-api
+
+provider:
+  name: datastax
+  stage: dev
+  runtime: nodejs14
+  region: us-west2
+  project: call-center-329523
+  # See the document below for setting up the credentials for GCP and Google Cloud Functions:
+  # https://serverless.com/framework/docs/providers/google/guide/credentials/
+  #
+  # the path to the credentials file needs to be absolute
+  # credentials: <change-to-path-to-keyfile-json>
+  # I cannot get these environment variables to be recognized in the node code.
+  # They may be ignored since my command line specifies other environment variables.
+  environment:
+    CONTACT_POINTS: '<change-to-public-ip>'
+    LOCAL_DC: 'us-west1'
+
+plugins:
+  - serverless-google-cloudfunctions
+
+functions:
+  login:
+    handler: login 
+    events: 
+      # it appears that the path here does not take effect and the endpoint is instead /login
+      - http: login
+
+package:
+  include:
+    - index.js
+  excludeDevDependencies: false
