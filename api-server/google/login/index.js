@@ -57,7 +57,7 @@ exports.login = async (req, res) => {
           exp: Math.floor(Date.now() / 1000) + (60 * 60),
           userid: `${result.userid}`
         }, JWT_SECRET);
-        res.end(JSON.stringify(`{"jwt": "${token}"`));
+        res.end(JSON.stringify(`{"jwt": "${token}"}`));
       } else {
         // Login failed
         console.log("Login failed");
