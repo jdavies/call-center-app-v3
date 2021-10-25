@@ -133,5 +133,5 @@ database/CallCenter_GeneratedToken.csv
 **/setenv.sh
 api-server/.DS_Store
 api-server/google/.DS_Store
-api-server/google/call-center-329523-51a0ac5aac00.json
 api-server/google/files/call-center-329523-51a0ac5aac00.json
+api-server/google/files/*.wav
