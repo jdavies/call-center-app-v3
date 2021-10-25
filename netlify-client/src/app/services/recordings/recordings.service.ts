@@ -3,7 +3,7 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {TokenStorageService} from "../tokenStorage/token-storage.service";
 import {environment} from "../../../environments/environment";
 
-const RECORDINGS_API_ENDPOINT = environment.serverUrl + '/recordings/';
+const RECORDINGS_API_ENDPOINT = environment.serverUrl + '/files/';
 
 
 @Injectable({
@@ -17,7 +17,7 @@ export class RecordingsService {
   }
 
   public getRecordings() {
-
+    console.log("--- getRecordings()");
     let httpOptions = {
       headers: new HttpHeaders({
         'Authorization': 'Bearer ' + this.tokenStorageService.getToken(),
