@@ -34,7 +34,8 @@ export class UploadService {
       })
     };
 
-    return this.httpClient.post(FILE_UPLOAD_API_ENDPOINT, formData, httpOptions);
+    // return this.httpClient.post(FILE_UPLOAD_API_ENDPOINT, formData, httpOptions);
+    return this.httpClient.post(FILE_UPLOAD_API_ENDPOINT, soundFile, httpOptions);
 
   }
 
