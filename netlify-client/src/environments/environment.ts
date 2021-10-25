@@ -5,11 +5,8 @@
 export const environment = {
   production: false,
   serverProtocol: 'http',
-  serverPort: 3030,
-  serverName: '18.118.196.183',
-  serverUrl: 'http://18.118.196.183:3030',
-  filestore: '10.211.118.18:/call_center_vm',
-  myDockerPort: 80
+  serverName: 'us-west2-call-center-329523.cloudfunctions.net',
+  serverUrl: 'https://us-west2-call-center-329523.cloudfunctions.net',
 };
 
 /*
