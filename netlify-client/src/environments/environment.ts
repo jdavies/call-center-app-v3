@@ -8,6 +8,7 @@ export const environment = {
   serverPort: 3030,
   serverName: '18.118.196.183',
   serverUrl: 'http://18.118.196.183:3030',
+  filestore: '10.211.118.18:/call_center_vm',
   myDockerPort: 80
 };
 

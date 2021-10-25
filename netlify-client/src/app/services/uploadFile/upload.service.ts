@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from "../../../environments/environment";
 import {TokenStorageService} from "../tokenStorage/token-storage.service";
 
-const FILE_UPLOAD_API_ENDPOINT = environment.serverUrl + '/files/';
+const FILE_UPLOAD_API_ENDPOINT = environment.serverUrl + '/files';
 
 let httpOptions = {
 
