@@ -28,14 +28,9 @@ const basePath = `/api/rest/v2/keyspaces/${process.env.KEYSPACE}`;
 exports.files = async (req, res) => {
   // File uploads are done via POST
   cors(req, res, async () => {
-    console.log("Files - TOP");
-    console.log("basePath = " + basePath);
-    console.log('Lat,Long = ' + req.headers['x-appengine-citylatlong']);
-    console.log('traceparent = ' + req.headers['traceparent']);
     res.set('Access-Control-Allow-Origin', 'https://call-center-605a88.netlify.app'); // Allow for CORS
 
     if(req.method === 'OPTIONS') {
-      console.log("OPTIONS called on files/!");
       // Send response to OPTIONS requests
       res.set('Access-Control-Allow-Methods', 'POST');
       res.set('Access-Control-Allow-Headers', 'Content-Type');
@@ -43,8 +38,6 @@ exports.files = async (req, res) => {
       res.status(204).send('');
     } else if (req.method == 'POST') {
       // A voice recording is being uploaded from Netlify
-      console.log("Uploading a file...");
-      console.log("authorization = " + req.headers['authorization']);
 
       // Get the JWT
       const tokens = req.headers['authorization'].split(" ");
@@ -52,7 +45,6 @@ exports.files = async (req, res) => {
 
       // Verify the token
       var decoded = jwt.verify(token, process.env.JWT_SECRET);
-      console.log("username = " + decoded.username);
       const gc = new Storage({
         keyFilename: "call-center-329523-51a0ac5aac00.json",
         projectId: "call-center-329523"
@@ -78,15 +70,12 @@ exports.files = async (req, res) => {
       }
 
       try {
-        console.log("---start");
         streamFileUpload();
         const latlong = req.headers['x-appengine-citylatlong'].split(",");
         const latitude = parseFloat(latlong[0]);
         const longitude = parseFloat(latlong[1]);
-        console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
         // Now write the record to Astra DB
         writeAstraRecord(destFileName, decoded.username, latitude, longitude);
-        console.log("---end");
       } catch {
         console.log(console.error);
       }
@@ -104,16 +93,13 @@ exports.files = async (req, res) => {
 async function writeAstraRecord(destFileName, userName, latitude, longitude) {
   const uri = basePath + "/message";
   // create an Astra DB client
-  console.log('Creating the Astra client...');
   const astraClient = await createClient({
     astraDatabaseId: process.env.ASTRA_DB_ID,
     astraDatabaseRegion: process.env.ASTRA_DB_REGION,
     applicationToken: process.env.ASTRA_DB_TOKEN
   });
 
-  console.log('Generating the time UUID');
   var time_uuid = uuidv1();
-  console.log(`Time UUID = ${time_uuid}`);
 
   var body = { 
     "call_id" : time_uuid,
@@ -129,11 +115,8 @@ async function writeAstraRecord(destFileName, userName, latitude, longitude) {
     "username": userName
   }
 
-  console.log(`POSTing the data to ${uri}`);
-  console.log("body = " + JSON.stringify(body));
   try {
     const { data, status } = await astraClient.post(uri, body);
-    console.log('POST status = ' + status);
 
     if (status == 201) {
       // Successful call
@@ -143,7 +126,6 @@ async function writeAstraRecord(destFileName, userName, latitude, longitude) {
       };
     } else {
       // REST call to the Astra database failed
-      console.log("POST Failed. Status = "+ status)
       return {
         statusCode: status,
         body: JSON.stringify({
