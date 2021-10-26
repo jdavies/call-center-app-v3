@@ -6,7 +6,6 @@ var SHA256 = require("crypto-js/sha256");
 const cors = require('cors')({ origin: 'https://call-center-605a88.netlify.app' });
 var jwt = require('jsonwebtoken');
 const { createClient } = require("@astrajs/rest");
-const JWT_SECRET = 'a34Ft!';
 const basePath = `/api/rest/v2/keyspaces/${process.env.KEYSPACE}`;
 /**
  * Responds to a login request.
@@ -27,8 +26,6 @@ exports.login = async (req, res) => {
   cors(req, res, async () => {
     console.log("login - TOP");
     console.log("basePath = " + basePath);
-    console.log("LOCAL_DC = " + process.env.LOCAL_DC);
-    console.log("LOCAL_DC2 = " + process.env['LOCAL_DC']);
     res.set('Access-Control-Allow-Origin', 'https://call-center-605a88.netlify.app'); // Allow for CORS
 
     if(req.method === 'OPTIONS') {
@@ -55,8 +52,9 @@ exports.login = async (req, res) => {
         // Create a JSONWeb Token to return to the user
         const token = jwt.sign({
           exp: Math.floor(Date.now() / 1000) + (60 * 60),
-          userid: `${result.userid}`
-        }, JWT_SECRET);
+          userid: `${result.userid}`,
+          username: `${username}`
+        }, process.env.JWT_SECRET);
         res.end(JSON.stringify(`{"jwt": "${token}"}`));
       } else {
         // Login failed
@@ -74,7 +72,7 @@ async function doLogin(username, password) {
   const astraClient = await createClient({
     astraDatabaseId: process.env.ASTRA_DB_ID,
     astraDatabaseRegion: process.env.ASTRA_DB_REGION,
-    applicationToken: process.env.ASTRA_DB_TOKEN,
+    applicationToken: process.env.ASTRA_DB_TOKEN
   });
 
   const { data, status } = await astraClient.get(uri);
@@ -102,4 +100,4 @@ async function doLogin(username, password) {
       })
     };
   }
-}
+};
