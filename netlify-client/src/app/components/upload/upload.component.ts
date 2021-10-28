@@ -192,11 +192,12 @@ export class UploadComponent implements OnInit {
     console.log("pollForUpdates() id = " + id);
     this.getTranscriptionService.getDetails(id)
       .subscribe((retData) => {
-        console.log("retData = " + JSON.stringify(retData));
+        console.log("|--- Test");
+        console.log("|--- retData = " + JSON.stringify(retData));
         // let data = retData['data'][0];
         let id = retData['call_id'];
         let remoteUrl = retData['call_link'];
-        let lastUpdated = retData['last_updated'];
+        let lastUpdated = 'never!!!'; // retData['last_updated'];
         let transcription = retData['transcript'];
         let sentiment = retData['sentiment'];
         let status = retData['process_status'];
