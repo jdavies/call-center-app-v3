@@ -140,7 +140,7 @@ export class UploadComponent implements OnInit {
       moment.now() + '-' + this.userService.getUserName() + '.wav',
       this.latitude, this.longitude)
       .subscribe((retData) => {
-          console.log('upload completed');
+          console.log('uploadFile() - upload completed');
           console.log("retData = " + JSON.stringify(retData));
 
           let id = retData['call_id'];
