@@ -191,19 +191,19 @@ export class UploadComponent implements OnInit {
     console.log("upload.components.ts.pollForUpdates() - TOP");
     console.log("pollForUpdates() id = " + id);
     this.getTranscriptionService.getDetails(id)
-      .subscribe((sata) => {
-        // console.log("retData = " + JSON.stringify(retData));
+      .subscribe((retData) => {
+        console.log("retData = " + JSON.stringify(retData));
         // let data = retData['data'][0];
-        let id = data['call_id'];
-        let remoteUrl = data['call_link'];
-        let lastUpdated = data['last_updated'];
-        let transcription = data['transcript'];
-        let sentiment = data['sentiment'];
-        let status = data['process_status'];
-        let latitude = data['latitude'];
-        let longitude = data['longitude'];
+        let id = retData['call_id'];
+        let remoteUrl = retData['call_link'];
+        let lastUpdated = retData['last_updated'];
+        let transcription = retData['transcript'];
+        let sentiment = retData['sentiment'];
+        let status = retData['process_status'];
+        let latitude = retData['latitude'];
+        let longitude = retData['longitude'];
 
-        console.log("pollForUpdates() data parsed");
+        console.log("pollForUpdates() retData parsed");
         this.speech = {
           id: id,
           transcription: transcription,
