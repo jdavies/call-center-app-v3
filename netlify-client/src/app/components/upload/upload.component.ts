@@ -191,9 +191,9 @@ export class UploadComponent implements OnInit {
     console.log("upload.components.ts.pollForUpdates() - TOP");
     console.log("pollForUpdates() id = " + id);
     this.getTranscriptionService.getDetails(id)
-      .subscribe((retData) => {
-        console.log("retData = " + JSON.stringify(retData));
-        let data = retData['data'][0];
+      .subscribe((sata) => {
+        // console.log("retData = " + JSON.stringify(retData));
+        // let data = retData['data'][0];
         let id = data['call_id'];
         let remoteUrl = data['call_link'];
         let lastUpdated = data['last_updated'];
@@ -203,6 +203,7 @@ export class UploadComponent implements OnInit {
         let latitude = data['latitude'];
         let longitude = data['longitude'];
 
+        console.log("pollForUpdates() data parsed");
         this.speech = {
           id: id,
           transcription: transcription,
