@@ -192,7 +192,7 @@ export class UploadComponent implements OnInit {
     console.log("pollForUpdates() id = " + id);
     this.getTranscriptionService.getDetails(id)
       .subscribe((retData) => {
-        console.log(retData);
+        console.log("retData = " + JSON.stringify(retData));
         let data = retData['data'][0];
         let id = data['call_id'];
         let remoteUrl = data['call_link'];
