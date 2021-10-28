@@ -30,13 +30,8 @@ const basePath = `/api/rest/v2/keyspaces/${process.env.KEYSPACE}`;
  */
 exports.files = async (req, res) => {
   // File uploads are done via POST
-  console.log("files/ request method: " + req.method);
   try {
     cors(req, res, async () => {
-      // res.set('Access-Control-Allow-Origin', 'https://call-center-605a88.netlify.app'); // Allow for CORS
-      // res.set('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
-      // res.set('Access-Control-Allow-Headers', 'Content-Type');
-      // res.set('Access-Control-Max-Age', '3600');
       if(req.method === 'OPTIONS') {
         // Send response to OPTIONS requests
         res.set('Access-Control-Allow-Origin', 'https://call-center-605a88.netlify.app'); // Allow for CORS
@@ -53,10 +48,10 @@ exports.files = async (req, res) => {
         } catch(err) {
           console.log("POST caught an error: " + err);
         }
-        
       } else if (req.method == 'GET') {
         // Netlify is polling the status of an upload
-        console.log("GET files/" + JSON.stringify(req));
+        console.log("GET files/");
+        console.log("GET url = " + req.url);
         res.status(200).send('{"foo": "bar"}');
       }
     }); //cors
@@ -117,7 +112,7 @@ async function uploadRecording(req, res) {
     if(result.statusCode == 201) {
       // Successfully wrote to the Astra DB.
       //Now lets start the transcription of the file
-      console.log("writeAstraRecord - result = " + JSON.stringify(result));
+      // console.log("writeAstraRecord - result = " + JSON.stringify(result));
       call_id = result.time_uuid;
       console.log("Creating the speech client...");
       // Creates a client
@@ -125,10 +120,10 @@ async function uploadRecording(req, res) {
       transcription = await transcribe(voiceFileURI, speechClient);
       const updateBody = {"transcript" : transcription};
       const updateResult = await updateCallRecord(call_id, updateBody);
-      console.log("updateCallRecord results: " + JSON.stringify(updateResult));
+      // console.log("updateCallRecord results: " + JSON.stringify(updateResult));
     } else {
       // There was an error writing to Astra!
-      console.log("Error writing to Astra DB: " + JSON.stringify(result));
+      // console.log("Error writing to Astra DB: " + JSON.stringify(result));
     }
   } catch {
     console.log(console.error);
@@ -183,9 +178,7 @@ async function writeAstraRecord(destFileName, userName, latitude, longitude, tra
       // REST call to the Astra database failed
       return {
         statusCode: status,
-        body: JSON.stringify({
-          time_uuid: 0
-        })
+        message: "writeAstraRecord: error writing to the Astra DB"
       };
     }
   } catch (error) {
