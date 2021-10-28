@@ -187,7 +187,7 @@ export class UploadComponent implements OnInit {
   }
 
   pollForUpdates(id) {
-
+    console.log("pollForUpdates() id = " + id);
     this.getTranscriptionService.getDetails(id)
       .subscribe((retData) => {
         console.log(retData);

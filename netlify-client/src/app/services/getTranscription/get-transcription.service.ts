@@ -17,7 +17,8 @@ export class GetTranscriptionService {
   }
 
   public getDetails(id) {
-
+    console.log("GetTranscriptionService: getDetails() id = " + id);
+    console.log("|--- GET " + FILE_UPLOAD_API_ENDPOINT + id);
     let httpOptions = {
       headers: new HttpHeaders({
         'Authorization': 'Bearer ' + this.tokenStorageService.getToken(),
