@@ -141,9 +141,10 @@ export class UploadComponent implements OnInit {
       this.latitude, this.longitude)
       .subscribe((retData) => {
           console.log('upload completed');
-          console.log(retData);
+          console.log("retData = " + JSON.stringify(retData));
 
           let id = retData['call_id'];
+          console.log("id = " + id);
           this.pollForUpdates(id);
         },
         (errData) => {
@@ -187,6 +188,7 @@ export class UploadComponent implements OnInit {
   }
 
   pollForUpdates(id) {
+    console.log("upload.components.ts.pollForUpdates() - TOP");
     console.log("pollForUpdates() id = " + id);
     this.getTranscriptionService.getDetails(id)
       .subscribe((retData) => {
@@ -235,6 +237,7 @@ export class UploadComponent implements OnInit {
 
 
   findMe() {
+    console.log("upload.components.ts.findMe() - TOP");
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
         console.log('the position is...');
