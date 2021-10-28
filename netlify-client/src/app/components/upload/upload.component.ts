@@ -200,11 +200,12 @@ export class UploadComponent implements OnInit {
         let lastUpdated = 'never!!!'; // retData['last_updated'];
         let transcription = retData['transcript'];
         let sentiment = retData['sentiment'];
-        let status = retData['process_status'];
+
+        // TBD: Set the status appropriately.
+        let status = 'gcp_complete'; // retData['process_status'];
         let latitude = retData['latitude'];
         let longitude = retData['longitude'];
 
-        console.log("pollForUpdates() retData parsed");
         this.speech = {
           id: id,
           transcription: transcription,
