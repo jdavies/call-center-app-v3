@@ -25,7 +25,7 @@ export class GetTranscriptionService {
         reportProgress: 'true',
         observe: 'events',
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*' 
+        'Access-Control-Allow-Origin': 'https://call-center-605a88.netlify.app' 
       })
     };
 
