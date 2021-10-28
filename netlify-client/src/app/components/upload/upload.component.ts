@@ -143,7 +143,7 @@ export class UploadComponent implements OnInit {
           console.log('upload completed');
           console.log(retData);
 
-          let id = retData['id'];
+          let id = retData['call_id'];
           this.pollForUpdates(id);
         },
         (errData) => {
