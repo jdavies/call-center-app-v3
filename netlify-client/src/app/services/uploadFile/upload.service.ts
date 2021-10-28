@@ -30,7 +30,8 @@ export class UploadService {
       headers: new HttpHeaders({
         'Authorization': 'Bearer ' + this.tokenStorageService.getToken(),
         reportProgress: 'true',
-        observe: 'events'
+        observe: 'events',
+        'Access-Control-Allow-Origin': '*'
       })
     };
 

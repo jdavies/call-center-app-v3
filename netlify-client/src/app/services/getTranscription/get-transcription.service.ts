@@ -23,7 +23,9 @@ export class GetTranscriptionService {
       headers: new HttpHeaders({
         'Authorization': 'Bearer ' + this.tokenStorageService.getToken(),
         reportProgress: 'true',
-        observe: 'events'
+        observe: 'events',
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*' 
       })
     };
 
