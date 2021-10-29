@@ -197,7 +197,7 @@ export class UploadComponent implements OnInit {
         // let data = retData['data'][0];
         let id = retData['call_id'];
         let remoteUrl = retData['call_link'];
-        let lastUpdated = 'never!!!'; // retData['last_updated'];
+        let lastUpdated = retData['last_updated_text'];
         let transcription = retData['transcript'];
         let sentiment = retData['sentiment'];
 
