@@ -51,8 +51,12 @@ exports.files = async (req, res) => {
       } else if (req.method == 'GET') {
         // Netlify is polling the status of an upload
         console.log("GET files/");
-        console.log("GET url = " + req.url);
-        res.status(200).send('{"foo": "bar"}');
+        // Get the ID of the record we want
+        const call_id = req.url.replace('/', '');
+        console.log("call_id = " + call_id);
+        const message = await getMessage(call_id);
+        console.log("message = " + JSON.stringify(message));
+        res.status(message.statusCode).send(message.data);
       }
     }); //cors
   } catch(err) {
@@ -121,6 +125,8 @@ async function uploadRecording(req, res) {
       const updateBody = {"transcript" : transcription};
       const updateResult = await updateCallRecord(call_id, updateBody);
       // console.log("updateCallRecord results: " + JSON.stringify(updateResult));
+      // Perform the sentiment analysis
+      // TBD
     } else {
       // There was an error writing to Astra!
       // console.log("Error writing to Astra DB: " + JSON.stringify(result));
@@ -149,7 +155,8 @@ async function writeAstraRecord(destFileName, userName, latitude, longitude, tra
   });
 
   var time_uuid = uuidv1();
-
+  const currentDate = new Date();
+  let ts = Date.now();
   var body = { 
     "call_id" : time_uuid,
     "call_audio_filetype": "wav",
@@ -161,6 +168,8 @@ async function writeAstraRecord(destFileName, userName, latitude, longitude, tra
     "sentiment_magnitude" : 0,
     "latitude": latitude,
     "longitude": longitude,
+    "last_updated" : ts,
+    "last_updated_text": currentDate.toString(),
     "geohash": "",
     "username": userName
   }
@@ -191,7 +200,7 @@ async function writeAstraRecord(destFileName, userName, latitude, longitude, tra
  * @param destFileName The name of the file
  */
  async function updateCallRecord(call_id, body) {
-   console.log("updateAstra() call_id = " + call_id + ", body = " + JSON.stringify(body));
+  console.log("updateAstra() call_id = " + call_id + ", body = " + JSON.stringify(body));
   const uri = basePath + "/message/" + call_id;
   // create an Astra DB client
   const astraClient = await createClient({
@@ -199,6 +208,13 @@ async function writeAstraRecord(destFileName, userName, latitude, longitude, tra
     astraDatabaseRegion: process.env.ASTRA_DB_REGION,
     applicationToken: process.env.ASTRA_DB_TOKEN
   });
+
+  // Modify the body to contain time stamp fields
+  const currentDate = new Date();
+  let ts = Date.now();
+  
+  body.last_updated = ts;
+  body.last_updated_text = currentDate.toString();
 
   try {
     // Updates to specific fields are done with a PATCH
@@ -265,4 +281,39 @@ async function transcribe(gsUri, client) {
     console.error(error);
   }
   return transcription;
+};
+
+async function getMessage(call_id) {
+  const uri = basePath + "/message/" + call_id;
+  // create an Astra DB client
+  const astraClient = await createClient({
+    astraDatabaseId: process.env.ASTRA_DB_ID,
+    astraDatabaseRegion: process.env.ASTRA_DB_REGION,
+    applicationToken: process.env.ASTRA_DB_TOKEN
+  });
+  
+  try {
+    // Read the message from the Astra database
+    const { data, status } = await astraClient.get(uri);
+
+    if (status == 200) {
+      // Successful call
+      console.log("getMessage() success!");
+      console.log("data = " + JSON.stringify(data));
+      return {
+        statusCode: status,
+        data: data[0],
+        message: "Successfuly retrieved the record"
+      };
+    } else {
+      // REST call to the Astra database failed
+      return {
+        statusCode: status,
+        message: "getMessage() failed"
+      };
+    }
+  } catch (error) {
+    console.log("updateCallRecord() threw an error:");
+    console.error(error);
+  }
 };
