@@ -200,9 +200,7 @@ export class UploadComponent implements OnInit {
         let lastUpdated = retData['last_updated_text'];
         let transcription = retData['transcript'];
         let sentiment = retData['sentiment'];
-
-        // TBD: Set the status appropriately.
-        let status = 'gcp_complete'; // retData['process_status'];
+        let status = retData['process_status'];
         let latitude = retData['latitude'];
         let longitude = retData['longitude'];
 
