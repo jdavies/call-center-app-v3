@@ -5,6 +5,7 @@ const { createWriteStream } = require("fs");
 const path = require("path");
 const { Storage } = require("@google-cloud/storage");
 const speech = require('@google-cloud/speech');
+const language = require('@google-cloud/language');
 const stream = require('stream');
 const cors = require('cors')({ origin: 'https://call-center-605a88.netlify.app' });
 var jwt = require('jsonwebtoken');
@@ -122,11 +123,33 @@ async function uploadRecording(req, res) {
       // Creates a client
       const speechClient = new speech.SpeechClient();
       transcription = await transcribe(voiceFileURI, speechClient);
-      const updateBody = {"transcript" : transcription};
-      const updateResult = await updateCallRecord(call_id, updateBody);
+      let updateBody = {"transcript" : transcription};
+      let updateResult = await updateCallRecord(call_id, updateBody);
       // console.log("updateCallRecord results: " + JSON.stringify(updateResult));
       // Perform the sentiment analysis
-      // TBD
+      // Creates a client
+      const languageClient = new language.LanguageServiceClient();
+      const document = {
+        content: transcription,
+        type: 'PLAIN_TEXT',
+      };
+      updateBody = {"process_status" : "gcp_transcribe_scheduled"};
+      updateResult = await updateCallRecord(call_id, updateBody);
+
+      const [analysis] = await languageClient.analyzeSentiment({document});
+
+      const sentiment = analysis.documentSentiment;
+      console.log('Document sentiment:');
+      console.log(`  Score: ${sentiment.score}`);
+      console.log(`  Magnitude: ${sentiment.magnitude}`)
+
+      // Write it to the database
+      updateBody = { "sentiment_score" : sentiment.score, 
+        "sentiment_magnitude" : sentiment.magnitude, 
+        "process_status": "gcp_complete"
+      };
+      updateResult = await updateCallRecord(call_id, updateBody);
+      console.log(`updateBody = ${JSON.stringify(updateBody)}, statusCode = ${updateResult.statusCode}`);
     } else {
       // There was an error writing to Astra!
       // console.log("Error writing to Astra DB: " + JSON.stringify(result));
