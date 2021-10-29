@@ -30,7 +30,6 @@ CREATE TABLE callcenter.message (
     latitude float,
     longitude float,
     geohash text,
-    geohash text,
     last_updated timestamp,
     last_updated_text text,
     username text
