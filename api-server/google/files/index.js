@@ -1,6 +1,5 @@
 'use strict';
 
-const escapeHtml = require('escape-html');
 const { createWriteStream } = require("fs");
 const path = require("path");
 const { Storage } = require("@google-cloud/storage");
@@ -44,20 +43,23 @@ exports.files = async (req, res) => {
         // A voice recording is being uploaded from Netlify
         try {
           uploadRecording(req, res);
-          // console.log("POST result = " + JSON.stringify(result));
-          // res.status(201).send(result);
         } catch(err) {
           console.log("POST caught an error: " + err);
         }
       } else if (req.method == 'GET') {
         // Netlify is polling the status of an upload
-        console.log("GET files/");
         // Get the ID of the record we want
         const call_id = req.url.replace('/', '');
-        console.log("call_id = " + call_id);
-        const message = await getMessage(call_id);
-        console.log("message = " + JSON.stringify(message));
-        res.status(message.statusCode).send(message.data);
+        if(call_id.length > 0) {
+          // Get a single call message
+          // Get the recent massages
+          const message = await getMessage(call_id);
+          res.status(message.statusCode).send(message.data);
+        } else {
+          // Get the recent massages
+          const message = await getRecentMessages(5);
+          res.status(message.statusCode).send(message.data);
+        }
       }
     }); //cors
   } catch(err) {
@@ -81,11 +83,9 @@ async function uploadRecording(req, res) {
     keyFilename: "call-center-329523-51a0ac5aac00.json",
     projectId: "call-center-329523"
   });
-  console.log("gc created!");
 
   const bucketName = "voice_mail";
   const voiceFilesBucket = gc.bucket(bucketName);
-  console.log("got the bucket!");
 
   const destFileName = req.headers['traceparent'] + ".wav";
   const file = voiceFilesBucket.file(destFileName);
@@ -98,8 +98,6 @@ async function uploadRecording(req, res) {
       // The file upload is complete
       console.log("UPLOAD COMPLETE");
     });
-
-    console.log(`${destFileName} uploaded to ${bucketName}`);
   }
   let call_id = "";
   let transcription = "";
@@ -113,46 +111,49 @@ async function uploadRecording(req, res) {
 
     // Now write the record to Astra DB
     var result = await writeAstraRecord(destFileName, decoded.username, latitude, longitude, transcription);
-    console.log("result.statusCode = " + result.statusCode);
     if(result.statusCode == 201) {
       // Successfully wrote to the Astra DB.
-      //Now lets start the transcription of the file
-      // console.log("writeAstraRecord - result = " + JSON.stringify(result));
+      // Now lets start the transcription of the file
       call_id = result.time_uuid;
-      console.log("Creating the speech client...");
-      // Creates a client
+      // Creates a trnascription client
       const speechClient = new speech.SpeechClient();
       transcription = await transcribe(voiceFileURI, speechClient);
       let updateBody = {"transcript" : transcription};
-      let updateResult = await updateCallRecord(call_id, updateBody);
-      // console.log("updateCallRecord results: " + JSON.stringify(updateResult));
+
+      // Wait unti the transcription is complete.
+      await updateCallRecord(call_id, updateBody);
+
       // Perform the sentiment analysis
-      // Creates a client
       const languageClient = new language.LanguageServiceClient();
       const document = {
         content: transcription,
         type: 'PLAIN_TEXT',
       };
+
+      // Update the Astra DB to show that the anaylsis is ocurring
       updateBody = {"process_status" : "gcp_transcribe_scheduled"};
-      updateResult = await updateCallRecord(call_id, updateBody);
+      await updateCallRecord(call_id, updateBody);
 
       const [analysis] = await languageClient.analyzeSentiment({document});
 
       const sentiment = analysis.documentSentiment;
-      console.log('Document sentiment:');
+      const sentimentDescription = calculateSentimentDescription(sentiment.score, sentiment.magnitude);
+      console.log(`Document sentiment: ${sentimentDescription}`);
       console.log(`  Score: ${sentiment.score}`);
       console.log(`  Magnitude: ${sentiment.magnitude}`)
-
-      // Write it to the database
-      updateBody = { "sentiment_score" : sentiment.score, 
+      
+      // Write the analysis results to the Astra database
+      updateBody = { 
+        "sentiment" : sentimentDescription,
+        "sentiment_score" : sentiment.score, 
         "sentiment_magnitude" : sentiment.magnitude, 
         "process_status": "gcp_complete"
       };
-      updateResult = await updateCallRecord(call_id, updateBody);
+      let updateResult = await updateCallRecord(call_id, updateBody);
       console.log(`updateBody = ${JSON.stringify(updateBody)}, statusCode = ${updateResult.statusCode}`);
     } else {
       // There was an error writing to Astra!
-      // console.log("Error writing to Astra DB: " + JSON.stringify(result));
+      console.log("Error writing to Astra DB: " + JSON.stringify(result));
     }
   } catch {
     console.log(console.error);
@@ -160,10 +161,43 @@ async function uploadRecording(req, res) {
 
   res.statusCode = 201;
   const responseMessage = `{"message": "File uploaded!", "call_id": "${call_id}", "transcription" : "${transcription}" }`;
-  console.log("responseMessage = " + responseMessage);
   res.end(responseMessage);
 }
 
+/**
+ * 
+ * @param {*} score A value from -1.0 (negative) to 1.0 (positive)
+ * @param {*} magnitude A value from 0 to infinity showing the emphasis
+ * @return {String} A plain text description of the sentiment.
+ * ie. Clearly positive, Clearly negative, etc.
+ */
+function calculateSentimentDescription(score, magnitude) {
+  let theMag = "";
+  let theScore = "";
+
+  if(magnitude < 1.0) {
+    theMag = "Somewhat";
+  } else if(magnitude >= 1.0 && magnitude < 2.0) {
+    theMag = "Seemingly";
+  } else if(magnitude >= 2.0) {
+    theMag = "Clearly";
+  }
+
+  if(score <= -0.8) {
+    theScore = "Angry";
+  } else if(score > -0.8 && score <= -0.2) {
+    theScore = "Unhappy";
+  } else if(score <= 0.0) {
+    theScore = "Dissatisfied";
+  } else if(score >= 0.8) {
+    theScore = "Delighted";
+  } else if(score >= 0.2) {
+    theScore = "Happy";
+  } else {
+    theScore = "Normal";
+  }
+  return `${theMag} ${theScore}`;
+}
 /**
  * Update the Astra database with the recording info
  * @param destFileName The name of the file
@@ -216,14 +250,13 @@ async function writeAstraRecord(destFileName, userName, latitude, longitude, tra
   } catch (error) {
     console.error(error);
   }
-};
+}
 
 /**
  * Update the Astra database with the recording info
  * @param destFileName The name of the file
  */
  async function updateCallRecord(call_id, body) {
-  console.log("updateAstra() call_id = " + call_id + ", body = " + JSON.stringify(body));
   const uri = basePath + "/message/" + call_id;
   // create an Astra DB client
   const astraClient = await createClient({
@@ -245,7 +278,6 @@ async function writeAstraRecord(destFileName, userName, latitude, longitude, tra
 
     if (status == 200) {
       // Successful call
-      console.log("updateCallRecord() success!");
       return {
         statusCode: status,
         data: data,
@@ -262,7 +294,7 @@ async function writeAstraRecord(destFileName, userName, latitude, longitude, tra
     console.log("updateCallRecord() threw an error:");
     console.error(error);
   }
-};
+}
 
 
 /**
@@ -274,8 +306,6 @@ async function writeAstraRecord(destFileName, userName, latitude, longitude, tra
 async function transcribe(gsUri, client) {
   // The path to the remote LINEAR16 file
   // const gcsUri = 'gs://cloud-samples-data/speech/brooklyn_bridge.raw';
-  console.log("transcribe() - TOP");
-  console.log("gsUri = " + gsUri);
 
   // The audio file's encoding, sample rate in hertz, and BCP-47 language code
   const audio = {
@@ -292,14 +322,12 @@ async function transcribe(gsUri, client) {
   };
 
   // Detects speech in the audio file
-  console.log("transcribe() - about to recognize...");
   let transcription = "";
   try {
     const [response] = await client.recognize(request);
     transcription = response.results
       .map(result => result.alternatives[0].transcript)
       .join('\n');
-    console.log(`Transcription: ${transcription}`);
   } catch (error) {
     console.error(error);
   }
@@ -321,8 +349,6 @@ async function getMessage(call_id) {
 
     if (status == 200) {
       // Successful call
-      console.log("getMessage() success!");
-      console.log("data = " + JSON.stringify(data));
       return {
         statusCode: status,
         data: data[0],
@@ -336,7 +362,51 @@ async function getMessage(call_id) {
       };
     }
   } catch (error) {
-    console.log("updateCallRecord() threw an error:");
+    console.log("getMessage() threw an error:");
     console.error(error);
   }
-};
+}
+
+/**
+ * Get the most recent messages
+ * @param {Integer} num_messages The maximum number of mesages to return
+ * @returns 
+ */
+async function getRecentMessages(num_messages) {
+  // curl -X GET "https://ba99a63b-49f7-4ac1-8388-f3056a7a47a0-us-west1.apps.astra.datastax.com/api/rest/v2/keyspaces/callcenter/message/rows?fields=call_id%2C%20latitude&page-size=2" 
+  // -H  "accept: application/json" 
+  // -H  "X-Cassandra-Token: AstraCS:WoYWnQGbzyQHooswjuyZRnoY:7be142be2764c8758ec9f37322a48cbd83ec99ff7a3740baf60e83b7160a6685"
+  console.log("getRecentMessage() TOP!");
+  const uri = basePath + `/message/rows?page-size=${num_messages}`;
+  // create an Astra DB client
+  const astraClient = await createClient({
+    astraDatabaseId: process.env.ASTRA_DB_ID,
+    astraDatabaseRegion: process.env.ASTRA_DB_REGION,
+    applicationToken: process.env.ASTRA_DB_TOKEN
+  });
+  
+  try {
+    // Read the message from the Astra database
+    const { data, status } = await astraClient.get(uri);
+
+    if (status == 200) {
+      // Successful call
+      console.log("getRecentMessage() success!");
+      console.log("data = " + JSON.stringify(data));
+      return {
+        statusCode: status,
+        data: data,
+        message: "Successfuly retrieved the records"
+      };
+    } else {
+      // REST call to the Astra database failed
+      return {
+        statusCode: status,
+        message: "getRecentMessages() failed"
+      };
+    }
+  } catch (error) {
+    console.log("getRecentMessages() threw an error:");
+    console.error(error);
+  }
+}
