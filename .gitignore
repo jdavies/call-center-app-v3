@@ -131,7 +131,7 @@ database/CallCenter_GeneratedToken.csv
 # netlify-client/netlify.toml
 # netlify-client/package-lock.json
 **/setenv.sh
-api-server/.DS_Store
-api-server/google/.DS_Store
+**/.DS_Store
 api-server/google/files/call-center-329523-51a0ac5aac00.json
 api-server/google/files/*.wav
+api-server/.DS_Store
