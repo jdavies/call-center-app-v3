@@ -56,8 +56,8 @@ exports.files = async (req, res) => {
           const message = await getMessage(call_id);
           res.status(message.statusCode).send(message.data);
         } else {
-          // Get the recent massages
-          const message = await getRecentMessages(5);
+          // Get the recent messages
+          const message = await getRecentMessages(10);
           res.status(message.statusCode).send(message.data);
         }
       }
@@ -377,10 +377,6 @@ async function getMessage(call_id) {
  * @returns 
  */
 async function getRecentMessages(num_messages) {
-  // curl -X GET "https://ba99a63b-49f7-4ac1-8388-f3056a7a47a0-us-west1.apps.astra.datastax.com/api/rest/v2/keyspaces/callcenter/message/rows?fields=call_id%2C%20latitude&page-size=2" 
-  // -H  "accept: application/json" 
-  // -H  "X-Cassandra-Token: AstraCS:WoYWnQGbzyQHooswjuyZRnoY:7be142be2764c8758ec9f37322a48cbd83ec99ff7a3740baf60e83b7160a6685"
-  console.log("getRecentMessage() TOP!");
   const uri = basePath + `/message/rows?page-size=${num_messages}`;
   // create an Astra DB client
   const astraClient = await createClient({
@@ -395,7 +391,6 @@ async function getRecentMessages(num_messages) {
 
     if (status == 200) {
       // Successful call
-      console.log("getRecentMessage() success!");
       console.log("data = " + JSON.stringify(data));
       return {
         statusCode: status,
