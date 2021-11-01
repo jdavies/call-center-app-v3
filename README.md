@@ -22,7 +22,7 @@ Video demo located at: [https://youtu.be/33LgrD2yuLs](https://youtu.be/33LgrD2yu
 
 ![Architecture Overview](./netlify-client/src/assets/images/CompletedTranscribingAndSentiementAnalysis.png)
 
-### UI client
+### Web Server
 
 The UI client is written in Angular and runs on netlify.  It a) calls an
 API server to login the user, upload a recording, get a recording's
@@ -34,15 +34,26 @@ Try it out - [https://call-center-605a88.netlify.app/login](https://call-center-
 
 Login using either:
 
-- demo2 / demo2Pwd
-- demo1/demo1PwdIsGood
+- demo@datastax.com / demo
+- demo1@datastax.com /demo
 
-Calling the netlify function directly - [https://call-center-605a88.netlify.app/.netlify/functions/getAllRecordings](https://call-center-605a88.netlify.app/.netlify/functions/getAllRecordings)
+After you are logged in, click on the ```Upload a File``` link at the top of
+the page and you can record a voice message. Your browsermay prompt you to
+give permission to use the microphone.
 
-### App Server
+After you record your voice message clic on the ```Dashboard``` link at the
+top of the page to see a map that shows where all of the messages came from.
 
-@REDO - Today, July 23rd 2021, this server is running on AWS.  It is running https w/ a domain
-name that is owned by Rajeev.
+### Microservices
+
+All of the microservices run using Google Cloud Functions. There are only 2
+microservices running:
+
+- Login
+- Files
+
+You can find the code for these microservices in the ```api-server/google/```
+folder.
 
 #### uploadServer - Audio Processor (API Server)
 
@@ -51,16 +62,6 @@ That is in **Node and uses the Node CQL** driver to make CQL queries.
 
 This code accepts the file from the client, and moves it to GCP's Object Store (keep GCP credentials a secret), and logs the metadata into Astra.
 
-#### Backend Message Processor - Audio Processor
-
-This is a Python Program that polls Astra for new recordings and then interacts GCP's Speech-to-Text and NLP service.  It stores the results into Astra.
-
-This **python program uses REST, Document and CQL APis.**
-
-The current file is /call-center-app-v3/call-audio-processing/read_call_job.py
-
-This python script runs as an infite loop on the AWS server (REDO), sleeping for a configurable amount of time and waking up to check the Astra database for new calls to process.  **This process needs to be rewritten.**
-
 ## Installation
 
 You will need the following components
@@ -68,7 +69,6 @@ You will need the following components
 1. Netlify account
 1. This github repository
 1. Astra DB in cloud provider / region of choice (our demo currently uses Google)
-1. AppServer to host uploadserver and audio processor (can be local or on cloud provider, we are currently using an AWS server TOFO: switch to Google)
 1. Credentials to a GCP service account, and a created cloud storage bucket.
 
 Details on installation are in progress.
