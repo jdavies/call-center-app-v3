@@ -24,18 +24,21 @@ Video demo located at: [https://youtu.be/33LgrD2yuLs](https://youtu.be/33LgrD2yu
 
 ### Web Server
 
-The UI client is written in Angular and runs on netlify.  It a) calls an
-API server to login the user, upload a recording, get a recording's
-status, and present the dashboard, and b) has a **netlify function that
-invokes Stargate's Document API** to get a specific user's recordings (at
-the moment it is hard coded to all recordings).
+The UI client is written in Angular and runs on netlify.  It
+
+a) calls an API server to login the user, upload a recording, get a recording's status, and present the dashboard, and
+
+b) has a **netlify function that
+invokes Stargate's REST API** to get a list of the most recent calls.
 
 Try it out - [https://call-center-605a88.netlify.app/login](https://call-center-605a88.netlify.app/login)
 
 Login using either:
 
 - demo@datastax.com / demo
-- demo1@datastax.com /demo
+- demo1@datastax.com / demo
+- demo2@datastax.com / demo
+- demo3@datastax.com / demo
 
 After you are logged in, click on the ```Upload a File``` link at the top of
 the page and you can record a voice message. Your browsermay prompt you to
