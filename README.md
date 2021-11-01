@@ -41,7 +41,7 @@ Login using either:
 - demo3@datastax.com / demo
 
 After you are logged in, click on the ```Upload a File``` link at the top of
-the page and you can record a voice message. Your browsermay prompt you to
+the page and you can record a voice message. Your browser may prompt you to
 give permission to use the microphone.
 
 After you record your voice message clic on the ```Dashboard``` link at the
@@ -58,13 +58,6 @@ microservices running:
 You can find the code for these microservices in the ```api-server/google/```
 folder.
 
-#### uploadServer - Audio Processor (API Server)
-
-The uploadServer is the API server that interacts with Astra (keep the Astra credentials a secret).
-That is in **Node and uses the Node CQL** driver to make CQL queries.
-
-This code accepts the file from the client, and moves it to GCP's Object Store (keep GCP credentials a secret), and logs the metadata into Astra.
-
 ## Installation
 
 You will need the following components
@@ -73,8 +66,6 @@ You will need the following components
 1. This github repository
 1. Astra DB in cloud provider / region of choice (our demo currently uses Google)
 1. Credentials to a GCP service account, and a created cloud storage bucket.
-
-Details on installation are in progress.
 
 ### Install nvm locally
 
@@ -107,4 +98,26 @@ nvm install 16.11.1
 
 ### Configure Your Google Account
 
-If you don't have a Google account already you can sign up for one for free at google.com.
+If you don't have a Google account already you can sign up for one for free at google.com. You will want to enable the APIs for:
+
+- Cloud Functions
+- Cloud Storage
+- Natural Language - specifically we use the Cloud Natural Language API
+
+To upload the login/ and files functions, go into the ```login/``` and
+```files/``` folders and run the ```build.sh``` scripts in each folder.
+The script will first try to run the ```setenv.sh``` script in the
+```database/``` folder. If you dont have the ```setenv.sh``` script
+defined there, simply create one with the following format:
+
+```sh
+export ASTRA_DB_ID=<YUR DATABASE ID>
+export ASTRA_DB_TOKEN=<YOUR ASTRA DATABASE TOKEN>
+export KEYSPACE=callcenter
+export ASTRA_DB_REGION=us-west1
+export ASTRA_CLIENT_ID=<YOUR ASTRA CLIENT ID>
+export ASTRA_CLIENT_SECRET=<YOUR ASTRA CLIENT_SECRET>
+export JWT_SECRET=<YOUR SECRET FOR GENERATING JWT>
+```
+
+Don't include the angle brackets in your export statements!
