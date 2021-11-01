@@ -177,24 +177,28 @@ function calculateSentimentDescription(score, magnitude) {
 
   if(magnitude < 1.0) {
     theMag = "Somewhat";
-  } else if(magnitude >= 1.0 && magnitude < 2.0) {
+  } else if(magnitude < 2.0) {
     theMag = "Seemingly";
-  } else if(magnitude >= 2.0) {
+  } else if(magnitude < 3.5) {
+    theMag = "Very";
+  } else {
     theMag = "Clearly";
   }
 
   if(score <= -0.8) {
     theScore = "Angry";
-  } else if(score > -0.8 && score <= -0.2) {
+  } else if(score <= -0.4) {
     theScore = "Unhappy";
-  } else if(score <= 0.0) {
+  } else if(score < -0.2) {
     theScore = "Dissatisfied";
-  } else if(score >= 0.8) {
-    theScore = "Delighted";
-  } else if(score >= 0.2) {
+  } else if(score < 0.2) {
+    theScore = "Neutral";
+  } else if(score < 0.4) {
+    theScore = "Positive";
+  } else if(score < 0.8) {
     theScore = "Happy";
   } else {
-    theScore = "Normal";
+    theScore = "Delighted";
   }
   return `${theMag} ${theScore}`;
 }
