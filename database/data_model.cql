@@ -16,6 +16,12 @@ CREATE CUSTOM INDEX userid_idx ON callcenter.users (userid) USING 'StorageAttach
 -- The password is a SHA256 hash of 'demo'
 insert into callcenter.users(username, password, userid, firstname) 
    values('demo@datastax.com', '2a97516c354b68848cdbd8f54a226a0a55b21ed138e207ad6c5cbb9c00aa5aea', uuid(), 'Demo');
+insert into callcenter.users(username, password, userid, firstname) 
+   values('demo1@datastax.com', '2a97516c354b68848cdbd8f54a226a0a55b21ed138e207ad6c5cbb9c00aa5aea', uuid(), 'Demo1');
+insert into callcenter.users(username, password, userid, firstname) 
+   values('demo2@datastax.com', '2a97516c354b68848cdbd8f54a226a0a55b21ed138e207ad6c5cbb9c00aa5aea', uuid(), 'Demo2');
+insert into callcenter.users(username, password, userid, firstname) 
+   values('demo3@datastax.com', '2a97516c354b68848cdbd8f54a226a0a55b21ed138e207ad6c5cbb9c00aa5aea', uuid(), 'Demo3');
 
 drop table if exists callcenter.message;
 CREATE TABLE callcenter.message (
