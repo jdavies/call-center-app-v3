@@ -5,9 +5,13 @@ Before running these scripts, but sure to set your environment variables for:
 - ASTRA_DB_ID
 - ASTRA_DB_TOKEN
 - KEYSPACE
+- ASTRA_DB_REGION
+- ASTRA_CLIENT_ID
+- ASTRA_CLIENT_SECRET
+- JWT_SECRET
 
 I have then defined in the ```setenv.sh``` file in my ```database/``` directory in
-the project. However, I hve NOT checked that file into Git for obvious reasons.
+the project. However, I have NOT checked that file into Git for obvious reasons.
 
 ```sh
 source ../../../database/setenv.sh
@@ -28,6 +32,7 @@ gcloud functions deploy files --runtime=nodejs14 --trigger-http \
   --set-env-vars ASTRA_DB_REGION=$ASTRA_DB_REGION \
   --set-env-vars ASTRA_CLIENT_ID=$ASTRA_CLIENT_ID \
   --set-env-vars ASTRA_CLIENT_SECRET=$ASTRA_CLIENT_SECRET \
+  --set-env-vars JWT_SECRET=$JWT_SECRET \
   --max-instances=10
 ```
 
