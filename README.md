@@ -13,10 +13,11 @@ The app works best on Chrome, and you need to give browser permissions for recor
 Click login and use the following credentials:
 
 - demo@datstax.com / demo
+- demo1@datstax.com / demo
+- demo2@datstax.com / demo
+- demo3@datstax.com / demo
 
 Press Start Recording and then start speaking, and press Stop Recording when finished.  Watch as your call is processed (it will take 1-2 mins).  Once you see status gcp-complete, you can click on the dashboard and click on the map to find your call and transcription.
-
-Video demo located at: [https://youtu.be/33LgrD2yuLs](https://youtu.be/33LgrD2yuLs)
 
 ## High Level Architecture
 
