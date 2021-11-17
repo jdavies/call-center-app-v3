@@ -90,8 +90,6 @@ nvm install 16.11.1
 ### Configure Your Netlify Account
 
 1. Clone a copy of the GitHub project at [GitHub](https://github.com/jdavies/call-center-app-v3)
-1. ???? In the ```call-center-app-v3/netlify-client/``` copy the template_netlify.toml file and chnge the copies name to ```netify.toml``` ????
-1. ???? Edit the ```netlify.toml``` file so the the last line contains the correct values for your Astra Database ID, the region it is in and also the Astra Database Token. ????
 1. Create a GitHub project on your github account for the call-center-app-v3 project and check in all of the project's code. Netlify will need to use your github account.
 1. Connect Netlify to your github ```call-center-app-v3``` project.
 1. In the Environment settings for your application in Netlify, define environment variables. ![Netlify Environment Variables](./images/netlify_environment_vars.png)
